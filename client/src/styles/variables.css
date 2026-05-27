@@ -1,0 +1,80 @@
+:root {
+
+    /* colores principales */
+    --primary: #9C7CA5;
+    --secondary: #896279;
+    --accent: #ADB2D3;
+    --dark: #594F3B;
+    --medium: #776258;
+    
+    /* colores de fondo */
+    --bg-primary: #C8B6CD;
+    --bg-secondary: #EEEAE8;
+    --bg-tertiary: #F0F0F5;
+    --bg-card: #F6F4F3;
+    
+    /* colores de estado */
+    --success: #4CAF50;
+    --warning: #FFA726;
+    --error: #EF5350;
+    --info: #42A5F5;
+    
+    /* colores de texto */
+    --text-primary: #594F3B;
+    --text-secondary: #776258;
+    --text-light: #9E9E9E;
+    --text-white: #FFFFFF;
+    
+    /* bordes */
+    --border-light: #E0E0E0;
+    --border-medium: #BDBDBD;
+    --border-dark: #9C7CA5;
+    
+    /* sombras */
+    --shadow-sm: 0 1px 3px rgba(89, 79, 59, 0.08);
+    --shadow-md: 0 4px 6px rgba(89, 79, 59, 0.10);
+    --shadow-lg: 0 10px 24px rgba(89, 79, 59, 0.12);
+    --shadow-xl: 0 20px 40px rgba(89, 79, 59, 0.15);
+    
+    /* transiciones suaves */
+    --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* border radius */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --radius-full: 9999px;
+    
+    /* espaciado */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-2xl: 48px;
+    
+    /* fonts */
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --font-secondary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    
+    /* tamaños de fuente por px */
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    
+    /* pesos de fuente */
+    --font-light: 300;
+    --font-normal: 400;
+    --font-medium: 500;
+    --font-semibold: 600;
+    --font-bold: 700;
+}
