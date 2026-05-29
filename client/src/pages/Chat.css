@@ -1,11 +1,11 @@
 .chat-page {
   display: flex;
-  height: calc(100vh - 65px); /* resta el header */
+  height: calc(100vh - 65px);
   background: var(--bg-secondary);
   overflow: hidden;
 }
 
-/* ── sidebar ── */
+/* sidebar */
 .chat-sidebar {
   width: 220px;
   flex-shrink: 0;
@@ -91,7 +91,7 @@
   flex-shrink: 0;
 }
 
-/* ── area principal ── */
+/* area principal */
 .chat-main {
   flex: 1;
   display: flex;

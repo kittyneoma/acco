@@ -116,7 +116,7 @@ const ProjectModal = ({ onClose, onProjectCreated }) => {
 
           <div className="modal-divider" />
 
-          {/* fila color + prioridad/fecha */}
+          {/* fila color y prioridad/fecha */}
           <div className="modal-row">
 
             {/* color */}

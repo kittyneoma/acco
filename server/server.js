@@ -51,8 +51,7 @@ app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route not found' });
 });
 
-// --- socket.io chat ---
-// guarda los usuarios conectados: socketId -> { name, avatar }
+// guarda los usuarios conectados en memoria
 const connectedUsers = new Map();
 
 io.on('connection', (socket) => {
@@ -86,7 +85,7 @@ io.on('connection', (socket) => {
       isOwn: false  // el cliente lo sobreescribe segun su socket
     };
 
-    // emite a todos (incluyendo quien lo envio)
+    // emite a todos - incluyendo quien lo envio
     io.emit('chat:message', message);
   });
 

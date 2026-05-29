@@ -3,7 +3,7 @@ const Project = require('../models/Project');
 
 /**
  * @desc    obtiene todas las tareas de un proyecto
- * @route   GET /api/projects/:projectId/tasks
+ * @route   GET /api/projects/projectId/tasks
  * @access  Private
  */
 exports.getTasks = async (req, res, next) => {
@@ -58,7 +58,7 @@ exports.getTasks = async (req, res, next) => {
 
 /**
  * @desc    obtiene una tarea por id
- * @route   GET /api/tasks/:id
+ * @route   GET /api/tasks/id
  * @access  Private
  */
 exports.getTask = async (req, res, next) => {
@@ -102,7 +102,7 @@ exports.getTask = async (req, res, next) => {
 
 /**
  * @desc    crea una nueva tarea
- * @route   POST /api/projects/:projectId/tasks
+ * @route   POST /api/projects/projectId/tasks
  * @access  Private
  */
 exports.createTask = async (req, res, next) => {
@@ -163,7 +163,7 @@ exports.createTask = async (req, res, next) => {
 
 /**
  * @desc    actualiza la tarea
- * @route   PUT /api/tasks/:id
+ * @route   PUT /api/tasks/id
  * @access  Private
  */
 exports.updateTask = async (req, res, next) => {
@@ -177,7 +177,7 @@ exports.updateTask = async (req, res, next) => {
       });
     }
 
-    // verifica los permisos
+    // verifica lps permisos
     const project = await Project.findById(task.project);
     if (project.owner.toString() !== req.user.id && 
         !project.collaborators.some(collab => collab.toString() === req.user.id)) {
@@ -222,7 +222,7 @@ exports.updateTask = async (req, res, next) => {
 
 /**
  * @desc    elimina la tarea
- * @route   DELETE /api/tasks/:id
+ * @route   DELETE /api/tasks/id
  * @access  Private
  */
 exports.deleteTask = async (req, res, next) => {
@@ -258,7 +258,7 @@ exports.deleteTask = async (req, res, next) => {
 
 /**
  * @desc    agrega un comentario a tarea
- * @route   POST /api/tasks/:id/comments
+ * @route   POST /api/tasks/id/comments
  * @access  Private
  */
 exports.addComment = async (req, res, next) => {
@@ -303,8 +303,8 @@ exports.addComment = async (req, res, next) => {
 };
 
 /**
- * @desc    actualiza ka posicion de la tarea - drag and drop
- * @route   PUT /api/tasks/:id/position
+ * @desc    actualiza ka posicion de la tarea
+ * @route   PUT /api/tasks/id/position
  * @access  Private
  */
 exports.updatePosition = async (req, res, next) => {

@@ -57,7 +57,7 @@ exports.getProjects = async (req, res, next) => {
 
 /**
  * @desc    obtiene un proyecto por id
- * @route   GET /api/projects/:id
+ * @route   GET /api/projects/id
  * @access  Private
  */
 exports.getProject = async (req, res, next) => {
@@ -136,7 +136,7 @@ exports.createProject = async (req, res, next) => {
 
 /**
  * @desc    actualiza el proyecto
- * @route   PUT /api/projects/:id
+ * @route   PUT /api/projects/id
  * @access  Private
  */
 exports.updateProject = async (req, res, next) => {
@@ -187,7 +187,7 @@ exports.updateProject = async (req, res, next) => {
 
 /**
  * @desc    elimina el proyecto
- * @route   DELETE /api/projects/:id
+ * @route   DELETE /api/projects/id
  * @access  Private
  */
 exports.deleteProject = async (req, res, next) => {
@@ -226,7 +226,7 @@ exports.deleteProject = async (req, res, next) => {
 
 /**
  * @desc    archivar/desarchivar proyecto
- * @route   PUT /api/projects/:id/archive
+ * @route   PUT /api/projects/id/archive
  * @access  Private
  */
 exports.toggleArchive = async (req, res, next) => {
@@ -264,7 +264,7 @@ exports.toggleArchive = async (req, res, next) => {
 
 /**
  * @desc    agrega un colaborador al proyecto
- * @route   POST /api/projects/:id/collaborators
+ * @route   POST /api/projects/id/collaborators
  * @access  Private
  */
 exports.addCollaborator = async (req, res, next) => {
@@ -312,7 +312,7 @@ exports.addCollaborator = async (req, res, next) => {
 
 /**
  * @desc    obtiene las estadisticas del proyecto
- * @route   GET /api/projects/:id/stats
+ * @route   GET /api/projects/id/stats
  * @access  Private
  */
 exports.getProjectStats = async (req, res, next) => {

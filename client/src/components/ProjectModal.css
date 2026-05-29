@@ -101,7 +101,7 @@
   background: var(--bg-secondary);
 }
 
-/* ── separadores ── */
+/* separadores */
 .modal-divider {
   height: 1px;
   background: var(--border-light);
@@ -125,7 +125,7 @@
   gap: var(--spacing-sm);
 }
 
-/* ── selector de color ── */
+/* selector de color */
 .color-picker {
   display: flex;
   flex-wrap: wrap;
@@ -133,7 +133,6 @@
   padding: 4px 0;
 }
 
-/* usamos <span> en vez de <button> para evitar resets de CSS */
 .color-dot {
   display: inline-block;
   width: 26px;
@@ -190,7 +189,7 @@
   padding-right: 36px;
 }
 
-/* ── botones ── */
+/* botones */
 .modal-actions {
   display: flex;
   justify-content: flex-end;
@@ -198,7 +197,6 @@
   padding-top: var(--spacing-xs);
 }
 
-/* boton cancel — rojo muted */
 .btn-cancel {
   background: transparent;
   color: #b85c5c;
@@ -230,7 +228,7 @@
   .modal-actions .btn-cancel { width: 100%; text-align: center; }
 }
 
-/* ── priority buttons ── */
+/* botones de priroridad */
 .priority-buttons {
   display: flex;
   flex-direction: column;

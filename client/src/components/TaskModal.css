@@ -1,9 +1,4 @@
-/* TaskModal reutiliza las clases base de ProjectModal.css:
-   .modal-overlay, .modal-container, .modal-header, .modal-form,
-   .modal-divider, .modal-actions, .btn-cancel
-   Solo se definen aqui los estilos especificos de tarea */
-
-/* textarea — igual que ProjectModal */
+/* textarea */
 .modal-textarea {
   width: 100%;
   height: 120px;
@@ -47,14 +42,14 @@
   background: var(--bg-primary);
 }
 
-/* fila prioridad + fecha */
+/* fila prioridad y fecha */
 .task-modal-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--spacing-lg);
 }
 
-/* botones de prioridad — igual que ProjectModal */
+/* botones de prioridad */
 .priority-buttons {
   display: flex;
   flex-direction: column;
@@ -89,7 +84,6 @@
   transition: background-color 0.15s ease;
 }
 
-/* cancel — rojo muted */
 .btn-cancel {
   background: transparent;
   color: #b85c5c;

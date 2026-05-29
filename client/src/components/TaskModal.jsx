@@ -85,7 +85,7 @@ const TaskModal = ({ projectId, onClose, onTaskCreated }) => {
             />
           </div>
 
-          {/* descripcion — mismo estilo que ProjectModal */}
+          {/* descripcion */}
           <div className="form-group">
             <label htmlFor="task-desc" className="label">Description</label>
             <textarea

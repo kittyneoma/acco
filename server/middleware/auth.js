@@ -88,8 +88,7 @@ const authorize = (...roles) => {
   };
 };
 
-/* middleware opcional de autenticacion - continua sin error si no hay token
- */
+/* middleware opcional de autenticacion - continua sin error si no hay token */
 const optionalAuth = async (req, res, next) => {
   try {
     let token;

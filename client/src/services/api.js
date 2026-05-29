@@ -27,7 +27,7 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      // el servidor respondio con un codigo de error
+      // el servidor responde con un codigo de error
       if (error.response.status === 401) {
         // token invalido o expirado
         localStorage.removeItem('token');
