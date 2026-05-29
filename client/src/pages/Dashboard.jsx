@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import projectService from '../services/projectService';
 import ProjectModal from '../components/ProjectModal';
+import { Link, useNavigate } from 'react-router-dom';
 import './Dashboard.css';
+
+const PROJECT_STATUSES = ['active', 'on-hold', 'completed', 'archived'];
 
 const Dashboard = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadProjects();
@@ -29,6 +32,17 @@ const Dashboard = () => {
   const handleProjectCreated = (newProject) => {
     setProjects(prev => [{ ...newProject, progress: 0 }, ...prev]);
   };
+
+  // actualiza status de proyecto 
+  const handleStatusChange = async (e, projectId) => {
+    const newStatus = e.target.value;
+    try {
+      await projectService.updateProject(projectId, { status: newStatus });
+      setProjects(prev => prev.map(p => p._id === projectId ? { ...p, status: newStatus } : p));
+    } catch (err) {
+      console.error('Failed to update project status', err);
+    }
+  }
 
   if (loading) {
     return (
@@ -71,17 +85,27 @@ const Dashboard = () => {
       ) : (
         <div className="projects-grid">
           {projects.map(project => (
-            <Link
-              key={project._id}
-              to={`/projects/${project._id}`}
+            <div
+                key={project._id}
               className="project-card card"
               style={{ borderLeftColor: project.color }}
+              onClick={() => navigate(`/projects/${project._id}`)}
             >
               <div className="project-header">
                 <h3>{project.name}</h3>
-                <span className={`status-badge status-${project.status}`}>
-                  {project.status}
-                </span>
+                {/* status editable - stopPropagation evita navefacion */}
+                <div onClick={e => e.stopPropagation()}>
+                  <select
+                    className={`status-select status-${project.status}`}
+                    value={project.status}
+                    onChange={(e) => handleStatusChange(e, project._id)}
+                    onClick={e => e.preventDefault()}
+                  >
+                    {PROJECT_STATUSES.map(s => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <p className="project-description">{project.description}</p>
@@ -107,7 +131,7 @@ const Dashboard = () => {
                   {project.taskCount || 0} Tasks
                 </span>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       )}

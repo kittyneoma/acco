@@ -11,7 +11,7 @@ const {
   getMyTasks
 } = require('../controllers/taskController');
 const { protect } = require('../middleware/auth');
-const { taskValidation, commentValidation } = require('../middleware/validator');
+const { taskValidation, commentValidation, updateTaskValidation } = require('../middleware/validator');
 
 // todas las rutas requieren autenticacion
 router.use(protect);
@@ -22,7 +22,7 @@ router.get('/my-tasks', getMyTasks);
 // rutas de tareas individuales
 router.route('/:id')
   .get(getTask)
-  .put(taskValidation, updateTask)
+  .put(updateTaskValidation, updateTask)
   .delete(deleteTask);
 
 router.post('/:id/comments', commentValidation, addComment);

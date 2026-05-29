@@ -14,6 +14,9 @@ const STATUS_LABELS = {
   'blocked': 'Blocked'
 };
 
+const PROJECT_STATUSES = ['active', 'on-hold', 'completed', 'archived'];
+const TASK_STATUSES = ['todo', 'in-progress', 'review', 'completed', 'blocked'];
+
 const ProjectDetail = () => {
   const { id } = useParams();
   const [project, setProject] = useState(null);
@@ -41,11 +44,33 @@ const ProjectDetail = () => {
     }
   };
 
+  // actualiza el status del proyecto
+  const handleProjectStatusChange = async (e) => {
+    const newStatus = e.target.value;
+    try {
+      await projectService.updateProject(id, { status: newStatus });
+      setProject(prev => ({ ...prev, status: newStatus }));
+    } catch (err) {
+      console.error('Failed to update project status', err);
+    }
+  };
+
+  // actualiza el status de una tarea
+  const handleTaskStatusChange = async (taskId, newStatus) => {
+    try {
+      await taskService.updateTask(taskId, { status: newStatus });
+      setTasks(prev => prev.map(t => t._id === taskId ? { ...t, status: newStatus } : t));
+    } catch (err) {
+      console.error('Failed to update task status', err);
+    }
+  };
+
   // agrega la nueva tarea a la lista sin recargar
   const handleTaskCreated = (newTask) => {
     setTasks(prev => [newTask, ...prev]);
   };
 
+  // estados de carga y error
   if (loading) {
     return (
       <div className="project-detail-container">
@@ -75,10 +100,20 @@ const ProjectDetail = () => {
             style={{ background: project.color }}
           />
           <h1>{project.name}</h1>
-          <span className={`status-badge status-${project.status}`}>
-            {project.status}
-          </span>
+
+          {/* status edtable del proyecto */}
+          <select
+            className={`status-select status-${project.status}`}
+            value={project.status}
+            onChange={handleProjectStatusChange}
+          >
+            {PROJECT_STATUSES.map(s => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+
+          </select>
         </div>
+
         {project.description && (
           <p className="project-detail-desc">{project.description}</p>
         )}
@@ -144,9 +179,18 @@ const ProjectDetail = () => {
                 <div className="task-item-header">
                   <h4 className="task-title">{task.title}</h4>
                   <div className="task-badges">
-                    <span className={`status-badge status-${task.status}`}>
-                      {STATUS_LABELS[task.status] || task.status}
-                    </span>
+
+                    {/* status editable de la tarea */}
+                    <select
+                      className={`status-select status-${task.status}`}
+                      value={task.status}
+                      onChange={(e) => handleTaskStatusChange(task._id, e.target.value)}
+                    >
+                      {TASK_STATUSES.map(s => (
+                        <option key={s} value={s}>{STATUS_LABELS[s] || s}</option>
+                      ))}
+                    </select>
+
                     <span className={`priority-badge priority-${task.priority}`}>
                       {task.priority}
                     </span>
@@ -169,7 +213,7 @@ const ProjectDetail = () => {
                   </p>
                 )}
               </div>
-            ))}
+            ))} 
           </div>
         )}
       </div>

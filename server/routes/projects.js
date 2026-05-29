@@ -11,7 +11,7 @@ const {
   getProjectStats
 } = require('../controllers/projectController');
 const { protect } = require('../middleware/auth');
-const { projectValidation } = require('../middleware/validator');
+const { projectValidation, updateProjectValidation } = require('../middleware/validator');
 
 // todas las rutas requieren autenticacion
 router.use(protect);
@@ -23,7 +23,7 @@ router.route('/')
 
 router.route('/:id')
   .get(getProject)
-  .put(projectValidation, updateProject)
+  .put(updateProjectValidation, updateProject)
   .delete(deleteProject);
 
 router.put('/:id/archive', toggleArchive);
