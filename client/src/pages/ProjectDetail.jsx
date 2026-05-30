@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import projectService from '../services/projectService';
 import taskService from '../services/taskService';
 import TaskModal from '../components/TaskModal';
+import ProjectModal from '../components/ProjectModal';
 import calendarIcon from '../icons/calendar-icon.png';
+import ConfirmModal from '../components/ConfirmModal';
 import './ProjectDetail.css';
 
 const STATUS_LABELS = {
@@ -19,11 +21,16 @@ const TASK_STATUSES = ['todo', 'in-progress', 'review', 'completed', 'blocked'];
 
 const ProjectDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [project, setProject] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  // modales
   const [showTaskModal, setShowTaskModal] = useState(false);
+  const [showProjectModal, setShowProjectModal] = useState(false);
+  const [editingTask, setEditingTask] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(null);
 
   useEffect(() => {
     loadProjectData();
@@ -70,6 +77,41 @@ const ProjectDetail = () => {
     setTasks(prev => [newTask, ...prev]);
   };
 
+  const handleProjectUpdated = (updatedProject) => {
+    setProject(prev => ({ ...prev, ...updatedProject }));
+  }
+
+  const handleTaskUpdated = (updatedTask) => {
+    setTasks(prev => prev.map(t => t._id === updatedTask._id ? updatedTask : t));
+  };
+
+  const openEditTask = (task) => {
+    setEditingTask(task);
+    setShowTaskModal(true);
+  };
+
+  const closeTaskModal = () => {
+    setShowTaskModal(false);
+    setEditingTask(null);
+  };
+  // elimina una tarea
+  const handleConfirmDelete = async () => {
+    if (!confirmDelete) return;
+    try {
+      if (confirmDelete.type === 'project') {
+        await projectService.deleteProject(confirmDelete.id);
+        navigate('/dashboard');
+      } else {
+        await taskService.deleteTask(confirmDelete.id);
+        setTasks(prev => prev.filter(t => t._id !== confirmDelete.id));
+      }
+    } catch (err) {
+      console.error('Delete failed', err);
+    } finally {
+      setConfirmDelete(null);
+    }
+  };
+
   // estados de carga y error
   if (loading) {
     return (
@@ -112,6 +154,26 @@ const ProjectDetail = () => {
             ))}
 
           </select>
+
+          {/* acciones de editar y eliminar proyecto */}
+          <div className="project-actions">
+            <button
+              className="btn btn-action edit-btn"
+              onClick={() => setShowProjectModal(true)}
+              title="Edit Project"
+            >
+              Edit
+            </button>
+            <button
+              className="btn btn-action delete-btn"
+              onClick={() => setConfirmDelete({
+                type: 'project', id: project._id, name: project.name
+              })}
+              title="Delete Project"
+            >
+              Delete
+            </button>
+          </div>
         </div>
 
         {project.description && (
@@ -177,25 +239,44 @@ const ProjectDetail = () => {
             {tasks.map(task => (
               <div key={task._id} className="task-item card">
                 <div className="task-item-header">
-                  <h4 className="task-title">{task.title}</h4>
-                  <div className="task-badges">
-
-                    {/* status editable de la tarea */}
-                    <select
-                      className={`status-select status-${task.status}`}
-                      value={task.status}
-                      onChange={(e) => handleTaskStatusChange(task._id, e.target.value)}
+                  {/* titulo, sttatus y prioridad en una fila */}
+                  <div className="task-title-group">
+                    <h4 className="task-title">{task.title}</h4>
+                  </div>
+                  <select 
+                    className={`status-select status-${task.status}`}
+                    value={task.status}
+                    onChange={(e) => handleTaskStatusChange(task._id, e.target.value)}
+                  >
+                    {TASK_STATUSES.map(s => (
+                      <option key={s} value={s}>{STATUS_LABELS[s] || s}</option>
+                    ))}
+                  </select>
+                  <span className={`priority-badge priority-${task.priority}`}>
+                    {task.priority}
+                  </span>
+                <div>
+                {/* acciones de editar y eliminar tarea */}
+                <div className="task-actions">
+                  <button
+                    className="action-btn edit-btn"
+                    onClick={() => openEditTask(task)}
+                    title="Edit Task"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="action-btn delete-btn"
+                    onClick={() => setConfirmDelete({
+                      type: 'task', id: task._id, name: task.title
+                    })}
+                    title="Delete Task"
                     >
-                      {TASK_STATUSES.map(s => (
-                        <option key={s} value={s}>{STATUS_LABELS[s] || s}</option>
-                      ))}
-                    </select>
-
-                    <span className={`priority-badge priority-${task.priority}`}>
-                      {task.priority}
-                    </span>
+                      Delete
+                    </button>
                   </div>
                 </div>
+              </div>
 
                 {task.description && (
                   <p className="task-description">{task.description}</p>
@@ -218,15 +299,38 @@ const ProjectDetail = () => {
         )}
       </div>
 
-      {/* modal de nueva tarea */}
+      {/* moodales */}
       {showTaskModal && (
         <TaskModal
           projectId={id}
+          task={editingTask}
           onClose={() => setShowTaskModal(false)}
           onTaskCreated={handleTaskCreated}
+          onTaskUpdated={handleTaskUpdated}
         />
       )}
 
+      {showProjectModal && (
+        <ProjectModal
+          project={project}
+          onClose={() => setShowProjectModal(false)}
+          onProjectCreated={() => {}}
+          onProjectUpdated={handleProjectUpdated}
+        />
+      )}
+
+      {confirmDelete && (
+        <ConfirmModal
+          message={`Delete ${confirmDelete.type === 'project' ? 'project' : 'task'}?`}
+          detail={
+            confirmDelete.type === 'project' ? `"${confirmDelete.name}" and all its tasks will be permanently deleted.`
+            : `"${confirmDelete.name}" will be permanently deleted.`
+          }
+          confirmText="Yes, Delete"
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setConfirmDelete(null)}
+        />
+      )}
     </div>
   );
 };

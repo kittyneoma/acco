@@ -145,6 +145,14 @@
   margin-bottom: var(--spacing-sm);
 }
 
+.task-title-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  flex: 1;
+}
+
 .task-title {
   font-size: var(--text-base);
   font-weight: var(--font-semibold);
@@ -209,7 +217,7 @@
   white-space: nowrap;
   background-repeat: no-repeat;
   background-position: right 6px center;
-  background-size: 12px;
+  background-size: 18px;
   background-image: url("/src/icons/arrow-down-icon.png");
   transition: opacity var(--transition-fast);
 }
@@ -275,6 +283,53 @@
   color: #fff;
 }
 
+/* botones de editar-eliminar */
+
+.project-actions,
+.task-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-shrink: 0; 
+}
+
+.action-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  font-family: var(--font-primary);
+  color: var(--text-secondary);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.action-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.edit-btn:hover {
+  background: rgba(156, 124, 165, 0.12);
+  color: var(--primary);
+}
+
+.delete-btn:hover {
+  background: rgba(239, 83, 80, 0.1);
+  color: #EF5350
+}
+
+.task-item .task-actions {
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.task-item:hover .task-actions {
+  opacity: 1;
+}
+
 /* responsive */
 @media (max-width: 768px) {
   .project-detail-container {
@@ -290,8 +345,11 @@
   }
 
   .task-item-header {
-    flex-direction: column;
-    align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
   }
 
   .task-badges {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import projectService from '../services/projectService';
 import ProjectModal from '../components/ProjectModal';
+import ConfirmModal from '../components/ConfirmModal';
 import { Link, useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 
@@ -12,6 +13,7 @@ const Dashboard = () => {
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  const [confirmDelete, setConfirmDelete] = useState(null);
 
   useEffect(() => {
     loadProjects();
@@ -42,7 +44,19 @@ const Dashboard = () => {
     } catch (err) {
       console.error('Failed to update project status', err);
     }
-  }
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!confirmDelete) return;
+    try {
+      await projectService.deleteProject(confirmDelete.id);
+      setProjects(prev => prev.filter(p => p._id !== confirmDelete.id));
+    } catch (err) {
+      console.error('Delete failed', err);
+  } finally {
+      setConfirmDelete(null);
+    }
+  };
 
   if (loading) {
     return (
@@ -106,6 +120,13 @@ const Dashboard = () => {
                     ))}
                   </select>
                 </div>
+                <button
+                  className="action-btn delete-btn card-delete-btn"
+                  onClick={() => setConfirmDelete({ id: project._id, name: project.name})}
+                  title="Delete Project"
+                >
+                  🗑️ Delete
+                </button>
               </div>
 
               <p className="project-description">{project.description}</p>
@@ -136,11 +157,22 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* modal de nuevo proyecto */}
+      {/* modales */}
       {showModal && (
         <ProjectModal
           onClose={() => setShowModal(false)}
           onProjectCreated={handleProjectCreated}
+          onProjectUpdated={() => {}}
+        />
+      )}
+
+      {confirmDelete && (
+        <ConfirmModal
+          message="Delete Project"
+          detail={'"${confirmDelete.name}" and all its tasks will be permanently deleted.'}
+          confirmTtext="Yes, Delete"
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setConfirmDelete(null)}
         />
       )}
 

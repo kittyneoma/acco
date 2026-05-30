@@ -256,6 +256,21 @@
     color: #fff;
 }
 
+.project-card-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.card-delete-btn {
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.project-card:hover .card-delete-btn {
+    opacity:1;
+}
+
 @media (max-width: 768px) {
     .dashboard-container {
         padding: var(--spacing-lg);
