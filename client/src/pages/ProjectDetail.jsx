@@ -51,6 +51,17 @@ const ProjectDetail = () => {
     }
   };
 
+  // refresh en pagina
+  const refreshProjectData = async () => {
+    try {
+      const projectRes = await projectService.getProject(id);
+
+      setProject(projectRes.data.project);
+    } catch (err) {
+      console.error('Failed to refresh project data', err);
+    }
+  };
+
   // actualiza el status del proyecto
   const handleProjectStatusChange = async (e) => {
     const newStatus = e.target.value;
@@ -67,6 +78,8 @@ const ProjectDetail = () => {
     try {
       await taskService.updateTask(taskId, { status: newStatus });
       setTasks(prev => prev.map(t => t._id === taskId ? { ...t, status: newStatus } : t));
+
+      await refreshProjectData();
     } catch (err) {
       console.error('Failed to update task status', err);
     }
@@ -75,6 +88,8 @@ const ProjectDetail = () => {
   // agrega la nueva tarea a la lista sin recargar
   const handleTaskCreated = (newTask) => {
     setTasks(prev => [newTask, ...prev]);
+
+    refreshProjectData();
   };
 
   const handleProjectUpdated = (updatedProject) => {
@@ -83,6 +98,8 @@ const ProjectDetail = () => {
 
   const handleTaskUpdated = (updatedTask) => {
     setTasks(prev => prev.map(t => t._id === updatedTask._id ? updatedTask : t));
+
+    refreshProjectData();
   };
 
   const openEditTask = (task) => {
@@ -94,6 +111,7 @@ const ProjectDetail = () => {
     setShowTaskModal(false);
     setEditingTask(null);
   };
+
   // elimina una tarea
   const handleConfirmDelete = async () => {
     if (!confirmDelete) return;
@@ -104,6 +122,8 @@ const ProjectDetail = () => {
       } else {
         await taskService.deleteTask(confirmDelete.id);
         setTasks(prev => prev.filter(t => t._id !== confirmDelete.id));
+
+        await refreshProjectData();
       }
     } catch (err) {
       console.error('Delete failed', err);
